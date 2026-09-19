@@ -1,4 +1,3 @@
-package src;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
@@ -14,9 +13,9 @@ public class CalculatorApp implements ActionListener {
     JFrame frame;
     JTextField textfield;
     JButton[] numberButtons = new JButton[10];
-    JButton[] functionButtons = new JButton[9];
+    JButton[] functionButtons = new JButton[10];
     JButton addButton, subButton, mulButton, divButton;
-    JButton decButton, equButton, delButton, acButton, percentButton;
+    JButton decButton, equButton, delButton, acButton, percentButton, negButton;
     JPanel panel;
 
     // --- Fonts and Colors ---
@@ -107,6 +106,7 @@ public class CalculatorApp implements ActionListener {
         delButton = new RoundButton("⌫");
         acButton = new RoundButton("AC");
         percentButton = new RoundButton("%");
+        negButton = new RoundButton("+/-");
 
         functionButtons[0] = addButton;
         functionButtons[1] = subButton;
@@ -117,8 +117,9 @@ public class CalculatorApp implements ActionListener {
         functionButtons[6] = delButton;
         functionButtons[7] = acButton;
         functionButtons[8] = percentButton;
+        functionButtons[9] = negButton;
 
-        for (int i = 0; i < 9; i++) {
+        for (int i = 0; i < 10; i++) {
             functionButtons[i].addActionListener(this);
             functionButtons[i].setFont(myFont);
             functionButtons[i].setFocusable(false);
@@ -142,6 +143,8 @@ public class CalculatorApp implements ActionListener {
         percentButton.setForeground(Color.BLACK);
         decButton.setBackground(darkGray);
         decButton.setForeground(Color.WHITE);
+        negButton.setBackground(darkGray);
+        negButton.setForeground(Color.WHITE);
 
         // Style operator buttons
         addButton.setBackground(orange);
@@ -185,10 +188,7 @@ public class CalculatorApp implements ActionListener {
         panel.add(addButton);
         // Row 5
         panel.add(numberButtons[0]);
-        // Make the Zero button span two columns
-        // For simplicity, we'll keep the grid layout and add a placeholder.
-        // A more complex layout manager would be needed for a true wide button.
-        panel.add(new JLabel()); // Empty space
+        panel.add(negButton);
         panel.add(decButton);
         panel.add(equButton);
 
@@ -221,9 +221,14 @@ public class CalculatorApp implements ActionListener {
         }
         // --- Decimal Button ---
         if (e.getSource() == decButton) {
-            if (textfield.getText().equals("Error")) textfield.setText("");
-            if (!textfield.getText().contains(".")) {
-                textfield.setText(textfield.getText().concat("."));
+           if (textfield.getText().equals("Error")) {
+               textfield.setText("");
+            }
+
+           if (textfield.getText().isEmpty()) {
+               textfield.setText("0.");
+            } else if (!textfield.getText().contains(".")) {
+               textfield.setText(textfield.getText().concat("."));
             }
         }
         // --- Operator Buttons ---
@@ -246,11 +251,15 @@ public class CalculatorApp implements ActionListener {
                     case '-': result = num1 - num2; break;
                     case '*': result = num1 * num2; break;
                     case '/':
-                        if (num2 != 0) {
-                            result = num1 / num2;
+                        if  (num2 != 0) {
+                             result = num1 / num2;
                         } else {
-                            textfield.setText("Error");
-                            return;
+                             textfield.setText("Error");
+                             num1 = 0;
+                             num2 = 0;
+                             result = 0;
+                             operator = '\0';
+                             return;
                         }
                         break;
                 }
@@ -278,14 +287,31 @@ public class CalculatorApp implements ActionListener {
                 textfield.setText(string.substring(0, string.length() - 1));
             }
         }
-        // --- Percent Button ---
+                // --- Percent Button ---
         if (e.getSource() == percentButton) {
-            if (!textfield.getText().isEmpty() && !textfield.getText().equals("Error")) {
+            if (!textfield.getText().isEmpty() &&
+                    !textfield.getText().equals("Error")) {
+
                 double temp = Double.parseDouble(textfield.getText());
                 temp /= 100;
                 textfield.setText(String.valueOf(temp));
             }
         }
+
+        // --- Positive / Negative Button ---
+        if (e.getSource() == negButton) {
+            if (!textfield.getText().isEmpty() &&
+                    !textfield.getText().equals("Error")) {
+
+                double value = Double.parseDouble(textfield.getText());
+                value *= -1;
+
+                if (value == (long) value) {
+                    textfield.setText(String.valueOf((long) value));
+                } else {
+                    textfield.setText(String.valueOf(value));
+                }
+            }
+        }
     }
 }
-
