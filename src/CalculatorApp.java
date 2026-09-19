@@ -81,20 +81,22 @@ public class CalculatorApp implements ActionListener {
         // --- Frame Setup ---
         frame = new JFrame("Calculator");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.setSize(420, 550);
+        frame.setSize(420, 720);
         frame.setLayout(null);
         frame.setResizable(false);
+        frame.setLocationRelativeTo(null);
         frame.getContentPane().setBackground(Color.BLACK);
 
         // --- Textfield (Display) Setup ---
         textfield = new JTextField();
-        textfield.setBounds(30, 40, 340, 70);
-        textfield.setFont(textFont);
+        textfield.setBounds(20, 30, 365, 90);
+        textfield.setFont(new Font("Arial", Font.PLAIN, 42));
         textfield.setEditable(false);
         textfield.setHorizontalAlignment(JTextField.RIGHT);
         textfield.setBackground(Color.BLACK);
         textfield.setForeground(Color.WHITE);
-        textfield.setBorder(BorderFactory.createEmptyBorder());
+        textfield.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
+        textfield.setCaretColor(Color.WHITE);
 
         // --- Button Initialization ---
         addButton = new RoundButton("+");
@@ -103,7 +105,7 @@ public class CalculatorApp implements ActionListener {
         divButton = new RoundButton("÷");
         decButton = new RoundButton(".");
         equButton = new RoundButton("=");
-        delButton = new RoundButton("⌫");
+        delButton = new RoundButton("DEL");
         acButton = new RoundButton("AC");
         percentButton = new RoundButton("%");
         negButton = new RoundButton("+/-");
@@ -125,6 +127,11 @@ public class CalculatorApp implements ActionListener {
             functionButtons[i].setFocusable(false);
         }
 
+        acButton.setFont(new Font("Arial", Font.BOLD, 22));
+        delButton.setFont(new Font("Arial", Font.BOLD, 16));
+        percentButton.setFont(new Font("Arial", Font.BOLD, 25));
+        negButton.setFont(new Font("Arial", Font.BOLD, 20));
+
         for (int i = 0; i < 10; i++) {
             numberButtons[i] = new RoundButton(String.valueOf(i));
             numberButtons[i].addActionListener(this);
@@ -139,6 +146,7 @@ public class CalculatorApp implements ActionListener {
         acButton.setForeground(Color.BLACK);
         delButton.setBackground(lightGray);
         delButton.setForeground(Color.BLACK);
+        delButton.setFont(new Font("Arial", Font.BOLD, 16));
         percentButton.setBackground(lightGray);
         percentButton.setForeground(Color.BLACK);
         decButton.setBackground(darkGray);
@@ -161,7 +169,7 @@ public class CalculatorApp implements ActionListener {
 
         // --- Panel for Buttons ---
         panel = new JPanel();
-        panel.setBounds(30, 130, 340, 370);
+        panel.setBounds(15, 145, 375, 540);
         panel.setLayout(new GridLayout(5, 4, 10, 10));
         panel.setBackground(Color.BLACK);
 
